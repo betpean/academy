@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <h1 class="page-header">등록</h1>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    환영합니다. 고객님
+                </div>
+
+                <div class="panel-body">
+                    <form role="form" action="/adm/upload" method="post" enctype="multipart/form-data">
+                        <div class="form-group has-success">
+                            <label class="control-label" for="title">제 목</label>
+                            <input name="title" type="text" class="form-control" id="title" placeholder="최소 3글자 이상 작성해주세요">
+                        </div>
+                        <div class="form-group has-warning">
+                            <label class="control-label" for="content">내 용</label>
+                            <input name="content" type="text" class="form-control" id="content" placeholder="빈칸이 될 수 없습니다.">
+                        </div>
+                        <div class="col-lg-4 image-container" th:if="${not #lists.isEmpty(imgdto1)}" th:each="img, status:${imgdto1}">
+                            <div class="panel panel-default">
+
+                                <div th:data-num="${img.ino}" class="panel-heading image">
+                                    [[${img.ino}]]
+                                    [[${img.oriImgName}]]
+                                    <button type="button" class="btn btn-default imgdelBtn">[[${img.ino}]] 삭제</button>
+
+
+
+                                    <button type="button" class="btn btn-default imgmodifyBtn">[[${img.ino}]] 수정</button>
+
+
+
+
+                                </div>
+                                <div th:data-num="${img.ino}" class="panel-body image">
+
+                                    <img th:data-num="${img.ino}" th:src="@{|/images/adm/@{${#temporals.format(img.regTime, 'yyMMdd')}}/@{${img.imName}}|}" alt="사진" width="300px;">
+                                </div>
+
+                            </div>
+                        </div> <!--이미지-->
+                        <!--파일 업로드-->
+                        <div class="form-group" th:each="num:${#numbers.sequence(1,5)}">
+                            <label>파일 업로드</label>
+                            <input type="file" name="boardImgFile" class="upload">
+                        </div> <!--파일 업로드-->
+
+
+
+                        <button type="submit" class="btn btn-default uploadBtn">저장</button>
+                        <a th:href="@{/adm/list}">목록</a>
+                        <button type="reset" class="btn btn-default">초기화</button>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+    const errors = [[${errors}]];
+    console.log(errors)
+
+    let errorMsg = '';
+
+    if (errors){
+        for (let i = 0; i < errors.length; i++){
+            errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
+
+            if (errors[i].field == 'title'){
+                if (errors[i].code == 'Size'){
+                    errorMsg += "글자수는 최소 3 최대 200 입니다. \n"
+                } else {
+                    errorMsg += "제목을 입력해주세요 \n"
+                }
+            }
+            if (errors[i].field == 'content'){
+                errorMsg += "내용을 입력해주세요 \n"
+            }
+            if (errors[i].field == 'writer'){
+                errorMsg += "작성자를 입력해주세요 \n"
+            }
+        }
+        alert(errorMsg);
+    }
+</script>
+</body>
+</html>

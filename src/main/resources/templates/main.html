@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .card {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+        <a href="user/list" class="hide"> 유저 리스트 </a>
+    </th:block>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <div class="card" style="width: 100%;">
+                    <div class="card-body">
+                        <a th:href="@{/board/list}">더보기</a>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>번호</th>
+                                <th>제목</th>
+                                <th>작성자</th>
+                                <th>작성일</th>
+                                <th>수정일</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- 게시글 목록 반복 출력 -->
+                            <tr th:if="${not #strings.isEmpty(pageResponseDTO.dtoList)}" th:each="board : ${pageResponseDTO.dtoList}">
+                                <td th:text="${board.bno}"></td>
+                                <td>
+                                    <a th:href="@{/board/view(bno=${board.bno})}" th:text="${board.title}"></a>
+                                    <span class="badge bg-info text-dark" >[[${board.replyCount}]]</span>
+                                </td>
+                                <td th:text="${board.user}"></td>
+                                <td th:text="${#temporals.format(board.regDate, 'yyyy-MM-dd')}"></td>
+                                <td th:text="${#temporals.format(board.updateTime, 'yyyy-MM-dd')}"></td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <div class="card" style="width: 100%;">
+                    <div class="card-body">
+                        <a th:href="@{/notice/list}">더보기</a>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>번호</th>
+                                <th>제목</th>
+                                <th>작성자</th>
+                                <th>작성일</th>
+                                <th>수정일</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="notice : ${pageResponseDTO1.dtoList}">
+                                <td th:text="${notice.nno}"></td>
+                                <td>
+                                    <a th:href="@{/notice/view/{nno}(nno=${notice.nno})}" th:text="${notice.title}"></a>
+                                </td>
+                                <td th:text="${notice.user.name}"></td>
+                                <td th:text="${#temporals.format(notice.regDate, 'yyyy-MM-dd')}"></td>
+                                <td th:text="${#temporals.format(notice.updateTime, 'yyyy-MM-dd')}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+    const result = [[${result}]]
+    if (result){
+        alert(result)
+    }
+
+</script>
+</body>
+</html>

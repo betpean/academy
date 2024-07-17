@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container">
+            <div class="col-sm-12">
+                <table class="table table-striped" style="width: 100%;">
+                    <thead>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${pageResponseDTO.dtoList}">
+
+                            <td th:text="${user.uno}"></td>
+
+                            <td th:text="${user.email}"></td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

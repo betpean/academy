@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입 선택창</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h1 style="margin-left: 130px;"> ----학생과 학원중 자신에게 맞는 항목을 선택해주세요---</h1>
+        <div class="row justify-content-evenly align-content-center display:inline-block">
+            <div style="padding: 100px;" class="col-4">
+                <a href="/user/new" class="btn btn-primary" > 일반 회원가입 </a>
+            </div>
+            <div  style="padding: 100px;" class="col-4">
+                <a href="/adm/register" class="btn btn-primary"> 학원 회원가입</a>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+</html>

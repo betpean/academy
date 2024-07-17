@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항 보기</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container">
+        <p>[[${notice.title}]]</p>
+        ----------------------------------
+        <div class="col-lg-4" th:if="${not #lists.isEmpty(imgdto)}">
+            <div class="panel panel-default" th:each="img, status:${imgdto}">
+                <div class="panel-heading">
+                </div>
+                <div class="panel-body">
+
+                    <img th:src="@{|/images/board/@{${#temporals.format(img.regDate, 'yyMMdd')}}/@{${img.imgName}}|}">
+
+                </div>
+            </div>
+        </div> <!--이미지-->
+        <p>[[${notice.content}]]</p>
+        ----------------------------------
+        <p>작성일: <span th:text="${#temporals.format(notice.regDate, 'yyyy-MM-dd')}">작성일</span></p>
+        <p>작성일: <span th:text="${#temporals.format(notice.updateTime, 'yyyy-MM-dd')}">수정일</span></p>
+        <a href="/notice/list" class="btn btn-primary">목록으로 돌아가기</a>
+        <th:block sec:authorize="isAuthenticated()">
+
+            <span sec:authorize="hasRole('ADMIN')">
+                <th:block th:if="${notice.user.email == #authentication.principal.username}">
+                    <a th:href="@{/notice/modify/{nno}(nno=${notice.nno})}" class="btn btn-primary" >수정</a>
+                    <a th:href="@{/notice/delete/{nno}(nno=${notice.nno})}" class="btn btn-danger">삭제</a>
+                </th:block>
+            </span>
+        </th:block>
+    </div>
+
+</div>
+
+</body>
+</html>

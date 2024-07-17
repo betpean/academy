@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container">
+        <h2>게시글 수정</h2>
+        <form id="form-mul" th:action="@{/adm/modify}" th:object="${adto}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:field="*{abno}">
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" id="title" name="title" th:field="*{title}" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea id="content" name="content" th:field="*{content}" class="form-control" rows="10" required></textarea>
+            </div>
+            <div class="col-lg-4 image-container" th:if="${not #lists.isEmpty(imgdto)}" th:each="img, status:${imgdto}">
+                <div class="panel panel-default">
+
+                    <div th:data-num="${img.ino}" class="panel-heading image">
+                        [[${img.oriImgName}]]
+                        <button type="button" class="btn btn-default imgdelBtn"> 삭제</button>
+
+
+
+                        <button type="button" class="btn btn-default imgmodifyBtn"> 수정</button>
+
+
+
+
+                    </div>
+                    <div th:data-num="${img.ino}" class="panel-body image">
+                        <img th:data-num="${img.ino}" th:src="@{|/images/admboard/@{${#temporals.format(img.regDate, 'yyMMdd')}}/@{${img.imgName}}|}" alt="사진" width="300px;">
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group" th:each="num:${#numbers.sequence(1,5)}">
+                <label>파일 업로드</label>
+                <input type="file" name="boardImgFile" class="upload">
+            </div> <!--파일 업로드-->
+
+
+            <button type="submit" class="btn btn-default modifyBtn1">수정</button>
+            <a href="/adm/list" class="btn btn-secondary">목록으로 돌아가기</a>
+
+        </form>
+    </div>
+</div>
+
+<script src="/js/reply.js"></script>
+
+
+<script layout:fragment="script" th:inline="javascript">
+
+    const result = [[${result}]]
+
+    if (result){
+        alert(result)
+    }
+    const formObj = document.querySelector("#form-mul");
+
+    //////////////////////////////////////////
+
+    const link = [[${pageRequestDTO.getLink()}]]
+    let imgdelBtn = $(".imgdelBtn"); //이미지 삭제 버튼
+    let image = $(".image") //이미지 패널
+    let imgmodifyBtn = $(".modifyBtn"); //이미지 수정 버튼
+    let modal = $(".modal")
+
+
+    imgmodifyBtn.on("click", function (){
+        console.log("1")
+        modal.modal("show");
+        console.log("2")
+
+    })
+    $(document).ready(function (){
+        imgdelBtn.on("click", function (e){
+            var imageContainer = $(this).closest('.image-container');
+            var inoInput = imageContainer.find('.ino');
+            var dataNumValue = imageContainer.find('img').attr('data-num');
+            console.log(dataNumValue+"데이타 넘버 벨류")
+            // inoInput.val(dataNumValue);
+            var str = `<input name="ino" value="${dataNumValue}">`;
+            imageContainer.append(str);
+            console.log(inoInput.val(dataNumValue));
+
+            imageContainer.find('img, .imgdelBtn').hide();
+            // imageContainer.hide();
+
+            // let ino = $(this).data("num")
+            // console.log("ino : "+ ino)
+
+        })
+    })
+    $(document).ready(function() {
+        var regex = new RegExp("(.*?)\.(exe|sh|zip|alz|tiff)$");  //불가능한 파일 확장자
+        var maxSize = 110485760;   //10MB가 최대크기
+        function checkExtension(fileName, fileSize) {
+            if(fileSize >= maxSize) {
+                alert("파일 사이즈 초과");
+                return false;
+            }
+
+            if(regex.test(fileName)) {
+                alert("해당 종류의 파일은 업로드 할 수 없습니다");
+                return false;
+            }
+
+            return true;
+        }
+        $(".upload").on("change",function (){
+
+            // var file = $(this).val().split("\\").pop();
+            // console.log(file)
+
+            var formDate = new FormData();
+
+            var inputFile = $(this)
+            var file = inputFile[0].files
+
+            console.log(file[0].name)
+            console.log(file[0].size)
+
+            if(!checkExtension( file[0].name, file[0].size  )) {
+                $(this).val("");
+                alert("홍길동")
+            }
+
+            console.log(file);
+
+        })
+    })
+    document.querySelector(".modifyBtn1").addEventListener("click", function (e){
+        e.preventDefault();
+        e.stopPropagation();
+        console.log("3")
+
+        formObj.action = `/adm/modify?${link}`;
+        formObj.method = "post";
+        formObj.submit();
+
+    });
+
+
+
+
+</script>
+</body>
+</html>

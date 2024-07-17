@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <meta charset="UTF-8">
+    <title>학원 목록</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container">
+        <h2>학원 목록</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성일</th>
+                <th>수정일</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <!-- 게시글 목록 반복 출력 -->
+            <tr th:if="${not #strings.isEmpty(pageResponseDTO.dtoList)}" th:each="admboard : ${pageResponseDTO.dtoList}">
+                <td th:text="${admboard.abno}"></td>
+                <td>
+                    <a th:href="@{/adm/view(abno=${admboard.abno})}"  th:text="${admboard.title}"></a>
+                </td>
+                <td th:text="${admboard.adu.name}"></td>
+                <td th:text="${#temporals.format(admboard.regDate, 'yyyy-MM-dd')}"></td>
+                <td th:text="${#temporals.format(admboard.updateTime, 'yyyy-MM-dd')}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-sm-12">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item previous" th:if="${pageResponseDTO.prev}" aria-controls="dataTables-example" tabindex="0" id="dataTables-example_previous">
+                            <a class="page-link" href="#" th:data-num="${pageResponseDTO.start -1}"  aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+
+                        <!--thymleaf에는 순서를 표기하는 #numbers.sequence가 있다.-->
+                        <th:block th:each="i: ${#numbers.sequence(pageResponseDTO.start,pageResponseDTO.end)}">
+                            <li th:class="${pageResponseDTO.page == i} ? 'page-item active':''" aria-controls="dataTables-example" tabindex="0">
+                                <a class="page-link" href="#" th:data-num="${i}">[[${i}]]</a>
+                            </li>
+                        </th:block>
+
+                        <li th:if="${pageResponseDTO.next}" class="page-item next" aria-controls="dataTables-example" tabindex="0" id="dataTables-example_next">
+                            <a class="page-link" href="#" th:data-num="${pageResponseDTO.end +1}">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+        </div> <!--페이징 처리-->
+        <a href="/adm/upload"> 글등록 </a>
+
+    </div>
+</div>
+<script layout:fragment="script" th:inline="javascript">
+    const result = [[${result}]]
+    if (result){
+        alert(result)
+    }
+
+    document.querySelector(".pagination").addEventListener("click", function (e){
+        e.stopPropagation();
+        e.preventDefault();
+
+        let target = e.target;
+
+        if (target.tagName !== 'A'){
+            return;
+        }
+
+        let num = target.getAttribute("data-num");
+
+        let formObj = document.querySelector("form");
+        formObj.method = "get";
+        formObj.action = window.location.pathname;
+        formObj.innerHTML += `<input type="hidden" name="page" value="${num}">`;
+        document.body.appendChild(formObj);
+        formObj.submit();
+
+    })
+    document.querySelector(".clearBtn").addEventListener("click", function (e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        self.location = '/adm/list';
+
+    })
+</script>
+</body>
+</html>
