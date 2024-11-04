@@ -14,29 +14,31 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Reply", indexes = {@Index(name = "idx_reply_board_bno", columnList = "board_bno")})
+@Table(name = "reply")
 public class Reply extends BaseEntity {
 
     @Id
     @Column(name = "rno")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rno; //댓글리스트
+    private Long id; //댓글리스트
 
-    private String replyText; // 내용
+    private LocalDate regDate; //등록일자
 
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Board board;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Notice notice;
+    private LocalDateTime updateTime; //수정일자
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;    //댓글작성자 (학원글)
+    @JoinColumn(name = "adm_id")
+    private User user;    //댓글작성자
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bno")
+    private User user1;
 
-    public void changeText(String text){
-        this.replyText = text;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "nno")
+    private User user2;
 
-    }
+    private String content2;    //댓글내용
+
 
 }

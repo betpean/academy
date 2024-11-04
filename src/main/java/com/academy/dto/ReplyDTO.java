@@ -2,10 +2,8 @@ package com.academy.dto;
 
 import com.academy.entity.User;
 import lombok.*;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,12 +19,15 @@ public class ReplyDTO {
     private Long ano;   //학원
     private Long nno;   //공지사항
 
-    private String replyText;    //내용
-    private String replyer;
+    private String content2;    //내용
 
+    private String user;  //작성자
+
+    private LocalDate regDate; //작성날짜
+
+    private LocalDate modDate; //수정날짜
 
 
 
 
 }
-

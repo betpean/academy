@@ -24,7 +24,7 @@
         <!-- 비밀번호-->
         <div class="mb-3">
             <label for="password" class="form-label">비밀번호</label>
-            <input type="text" class="form-control"  name="password"  placeholder="비밀번호를 입력해주세요">
+            <input type="password" class="form-control"  name="password"  placeholder="비밀번호를 입력해주세요">
         </div>
 
         <p th:if="${loginErrorMsg}"  class="error" th:text="${loginErrorMsg}">
@@ -32,7 +32,7 @@
         </p>
         <div style="text-align: center">
             <button type="submit" class="btn btn-outline-primary" onclick="location.href='/'">로그인</button>
-            <button type="button" class="btn btn-outline-primary" onclick="location.href='/registerjoin'">회원가입</button>
+            <button type="button" class="btn btn-outline-primary" onclick="location.href='/user/new'">회원가입</button>
         </div>
 
 

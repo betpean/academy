@@ -33,10 +33,6 @@ public class User extends BaseEntity {
 
     private String name;       //이름
 
-    private String adm;     //학원명
-
-    private String admkind; //학원종류
-
     private String age;        //나이
 
     private String gender;      //성별
@@ -48,6 +44,8 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;          //권한
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
 
     //회원가입용
@@ -55,7 +53,6 @@ public class User extends BaseEntity {
                                   PasswordEncoder passwordEncoder) {
         //modelmapper
         User user = new User();
-        user.setId(userFormDTO.getId());
         user.setName(userFormDTO.getName());
         user.setAge(userFormDTO.getAge());
         user.setEmail(userFormDTO.getEmail());
@@ -69,40 +66,15 @@ public class User extends BaseEntity {
 
         return user;
     }
-    public static User createAcademy(UserFormDTO userFormDTO,
-                                  PasswordEncoder passwordEncoder) {
-        //modelmapper
+    public static User createAdminUser(UserFormDTO userFormDTO,
+                                       PasswordEncoder passwordEncoder) {
+
         User user = new User();
-        user.setId(userFormDTO.getId());
-        user.setName(userFormDTO.getName());
-        user.setAge(userFormDTO.getAge());
         user.setEmail(userFormDTO.getEmail());
-        user.setGender(userFormDTO.getGender());
-        user.setAdmkind(userFormDTO.getAdmkind());
-        user.setAdm(userFormDTO.getAdm());
-        //패스워드의 암호화
-        String password =  passwordEncoder.encode(userFormDTO.getPassword());
-        user.setPassword(password);
-        user.setAddress(userFormDTO.getAddress());
-        //memberuser.setRole(Role.USER);      // 사용자가 가입했을때
-        user.setRole(Role.ACADEMY);      // 사용자가 가입했을때
-
-        return user;
-    }
-    public static User modifyUser(UserFormDTO userFormDTO,PasswordEncoder passwordEncoder){
-        User user = new User();
-        user.setId(userFormDTO.getId());
         user.setName(userFormDTO.getName());
-        user.setAge(userFormDTO.getAge());
-        user.setEmail(userFormDTO.getEmail());
-        user.setGender(userFormDTO.getGender());
-        //패스워드의 암호화
-        String password =  passwordEncoder.encode(userFormDTO.getPassword());
+        String password = passwordEncoder.encode(userFormDTO.getPassword());
         user.setPassword(password);
-        user.setAddress(userFormDTO.getAddress());
-
-        user.setRole(Role.ADMIN);
-
+        user.setRole(Role.ADMIN);		// Role 설정
         return user;
     }
 

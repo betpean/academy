@@ -43,24 +43,21 @@ public class NoticeController {
     }
 
     @GetMapping("/modify/{nno}")
-    public String noticemodifyForm(@PathVariable Long nno, Model model,Principal principal) {
-        if (principal == null) {
-            return "redirect:/user/login";
-        }
+    public String modifyForm(@PathVariable Long nno, Model model) {
         NoticeDTO noticeDTO = noticeService.view(nno);
         model.addAttribute("noticeDTO", noticeDTO);
         return "notice/modify";
     }
 
     @PostMapping("/modify")
-    public String noticemodifyPost(@Valid NoticeDTO noticeDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String modifyPost(@Valid NoticeDTO noticeDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/notice/modify/" + noticeDTO.getNno();
         }
         noticeService.modify(noticeDTO);
         redirectAttributes.addFlashAttribute("result", noticeDTO.getNno() + " 공지가 수정되었습니다.");
-        return "redirect:/notice/view/" + noticeDTO.getNno();
+        return "redirect:/notice/list";
     }
 
     @GetMapping("/list")
@@ -72,7 +69,6 @@ public class NoticeController {
 
     @GetMapping("/view/{nno}")
     public String view(@PathVariable Long nno, Model model) {
-
         NoticeDTO noticeDTO = noticeService.view(nno);
         model.addAttribute("notice", noticeDTO);
         return "notice/view";

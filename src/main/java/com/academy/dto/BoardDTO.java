@@ -1,6 +1,5 @@
 package com.academy.dto;
 
-import com.academy.entity.User;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -21,7 +20,7 @@ public class BoardDTO {
 
     private String content; //내용
 
-    private User userId;    //작성자
+    private String userId;    //작성자
 
     private LocalDate regDate;  //등록일자
 

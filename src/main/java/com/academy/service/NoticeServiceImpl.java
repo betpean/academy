@@ -49,28 +49,27 @@ public class NoticeServiceImpl implements NoticeService{
     public PageResponseDTO<NoticeDTO> list(PageRequestDTO pageRequestDTO) {
         Page<Notice> noticePage = noticeRepository.findAll(pageRequestDTO.getPageable());
 
-        List<NoticeDTO> noticeDTOList =
+        List<NoticeDTO> noticedDTOList =
                 noticePage.getContent().stream()
                         .map(notice -> modelMapper.map(notice, NoticeDTO.class))
                         .collect(Collectors.toList());
 
-        log.info(noticeDTOList); //boardDTOList에는 bno등은 있지만 userId는 없다. user.userId라서
+        log.info(noticedDTOList); //boardDTOList에는 bno등은 있지만 userId는 없다. user.userId라서
 
         for( Notice n  : noticePage.getContent() ){
-            for(NoticeDTO ndto :noticeDTOList){
+            for(NoticeDTO ndto :noticedDTOList){
                 if(n.getNno().equals(ndto.getNno()) ){
                     Optional<User> user = userRepository.findById( n.getUser().getUno() );
                     User user1 = user.orElseThrow();
-                    ndto.setUser(user1); //board객체에서 userid를 꺼내서
+                    ndto.setUser(user1.getName()); //board객체에서 userid를 꺼내서
                     //userRepository에서 userid로 검색해서
                     // 나온 user.getname를 하면 이름나온다.
-                    log.info("1"+user1.getName());
                 }
             }
         }
 
         return PageResponseDTO.<NoticeDTO>withAll()
-                .dtoList(noticeDTOList)
+                .dtoList(noticedDTOList)
                 .pageRequestDTO(pageRequestDTO)
                 .total((int)noticePage.getTotalElements())
                 .build();

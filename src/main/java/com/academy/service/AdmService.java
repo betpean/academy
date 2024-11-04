@@ -1,21 +1,24 @@
 package com.academy.service;
 
-import com.academy.dto.*;
+import com.academy.dto.AdmDTO;
+import com.academy.dto.BoardDTO;
+import com.academy.dto.PageRequestDTO;
+import com.academy.dto.PageResponseDTO;
+import com.academy.entity.Adm;
+import com.academy.entity.Board;
 
-import java.security.Principal;
 import java.util.List;
 
 public interface AdmService {
+    public Long upload(AdmDTO admDTO,String ano);
 
-    public Long upload(AdmBoardDTO admboardDTO, String email);
+    public List<Board> select();
 
-    public PageResponseDTO<AdmBoardDTO> list(PageRequestDTO pageRequestDTO);   //리스트,페이징처리,목록
+    public PageResponseDTO<AdmDTO> list(PageRequestDTO pageRequestDTO);
 
-    public AdmBoardDTO view(Long bno, PageRequestDTO pageRequestDTO, Principal principal); //글 보기
+    public AdmDTO view(Long ano); //글 보기
 
-    public void modify(AdmBoardDTO admBoardDTO);  //글 수정
+    public void modify(AdmDTO admDTO);  //글 수정
 
-    public void delete(Long abno);   //굴 삭제
-
+    public void delete(Long ano);   //굴 삭제
 }
-

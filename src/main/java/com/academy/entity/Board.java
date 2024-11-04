@@ -6,8 +6,6 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -33,14 +31,6 @@ public class Board extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
-    @OneToMany(mappedBy = "board" , cascade = CascadeType.ALL, orphanRemoval = true
-            , fetch = FetchType.LAZY)
-    private List<Reply> replies = new ArrayList<>();
-
-    @OneToMany(mappedBy = "board" , cascade = CascadeType.ALL, orphanRemoval = true
-            , fetch = FetchType.LAZY)
-    private List<BoardImg> boardImgs = new ArrayList<>();
 
 
     public void saveWithExceptionHandling(EntityManager entityManager) throws Exception {

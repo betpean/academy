@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @Log4j2
 public class CustomAuthenticationEntryPoint implements
-        AuthenticationEntryPoint {
+        AuthenticationEntryPoint {  //권한이 없는 사용자가 접근하려고 할 때 어떻게 응답할지를 정의한 클래스
     //http request header에
     //XMLHttpRequest라는 값이 세팅되어 요청이 옴
     // 인증되지 않은 사용자가 ajax로 리소스를 요청할 경우
@@ -25,12 +25,6 @@ public class CustomAuthenticationEntryPoint implements
         }else {
             response.sendRedirect("/user/login");
         }
-//        if ("XMLHttpRequest".equals(request.getHeader("x-requested-with"))) {
-//            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden");
-//            response.sendRedirect("/");
-//        }else {
-//            response.sendRedirect("/");
-//        }
 
     }
 

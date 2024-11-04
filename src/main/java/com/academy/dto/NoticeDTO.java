@@ -1,6 +1,5 @@
 package com.academy.dto;
 
-import com.academy.entity.User;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -19,7 +18,7 @@ public class NoticeDTO {
 
     private String content; //내용
 
-    private User user;    //작성자
+    private String user;    //작성자
 
     private LocalDate regDate;
 

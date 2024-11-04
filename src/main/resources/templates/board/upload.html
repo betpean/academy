@@ -35,36 +35,6 @@
                         -->
                         <!--             <h2 th:text="${principal.name}"></h2>-->
 
-                        <!--이미지-->
-
-                        <div class="col-lg-4 image-container" th:if="${not #lists.isEmpty(imgdto)}" th:each="img, status:${imgdto}">
-                            <div class="panel panel-default">
-
-                                <div th:data-num="${img.ino}" class="panel-heading image">
-                                    [[${img.ino}]]
-                                    [[${img.oriImgName}]]
-                                    <button type="button" class="btn btn-default imgdelBtn">[[${img.ino}]] 삭제</button>
-
-
-
-                                    <button type="button" class="btn btn-default imgmodifyBtn">[[${img.ino}]] 수정</button>
-
-
-
-
-                                </div>
-                                <div th:data-num="${img.ino}" class="panel-body image">
-
-                                    <img th:data-num="${img.ino}" th:src="@{|/images/item/@{${#temporals.format(img.regTime, 'yyMMdd')}}/@{${img.imName}}|}" alt="사진" width="300px;">
-                                </div>
-
-                            </div>
-                        </div> <!--이미지-->
-                        <!--파일 업로드-->
-                        <div class="form-group" th:each="num:${#numbers.sequence(1,5)}">
-                            <label>파일 업로드</label>
-                            <input type="file" name="boardImgFile" class="upload">
-                        </div> <!--파일 업로드-->
 
                         <button type="submit" class="btn btn-default uploadBtn">저장</button>
                         <a th:href="@{/board/list}">목록</a>
@@ -114,14 +84,6 @@
         self.location = "/board/list";
 
     });
-    const result = [[${result}]]
-
-    if (result){
-        alert(result)
-    }
-
-
-
 
 </script>
 

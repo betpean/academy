@@ -1,42 +1,39 @@
+
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/layout1}">
 <head>
     <meta charset="UTF-8">
-    <title>공지사항 보기</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Title</title>
 </head>
 <body>
+
+
 <div layout:fragment="content">
-    <div class="container">
-        <p>[[${adto.title}]]</p>
-        ----------------------------------
 
-        <p>[[${adto.content}]]</p>
-        <div class="col-lg-4" th:if="${not #lists.isEmpty(imgdto1)}">
-            <div class="panel panel-default" th:each="img, status:${imgdto1}">
-                <div class="panel-heading">
-                </div>
-                <div class="panel-body">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">
+                <h3>[[${dto.title}]]</h3>
+            </th>
+        </tr>
+        </thead>
 
-                    <img th:src="@{|/images/admboard/@{${#temporals.format(img.regDate, 'yyMMdd')}}/@{${img.imgName}}|}">
+        <tbody>
+        <tr>
+            <th scope="col">
+                [[${dto.content}]]
+            </th>
+        </tr>
+        </tbody>
 
-                </div>
-            </div>
-        </div> <!--이미지-->
-        ----------------------------------
-        <p>작성일: <span th:text="${#temporals.format(adto.regDate, 'yyyy-MM-dd')}">작성일</span></p>
-        <p>작성일: <span th:text="${#temporals.format(adto.updateTime, 'yyyy-MM-dd')}">수정일</span></p>
-        <a href="/adm/list" class="btn btn-primary">목록으로 돌아가기</a>
-        <span th:if="${#authentication.principal.username ==adto.getAdu().email}">
-            <a th:href="@{/adm/delete(abno=${adto.abno})}" class="btn btn-danger" sec:authorize="isAuthenticated()">삭제</a>
-            <a th:href="@{|/adm/modify/${adto.abno}|}" class="btn btn-primary" sec:authorize="isAuthenticated()">수정</a>
-        </span>
-    </div>
+    </table>
 
 </div>
+
 
 </body>
 </html>

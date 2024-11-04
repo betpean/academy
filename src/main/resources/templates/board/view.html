@@ -3,335 +3,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/layout1}">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
 </head>
 <body>
 
 
 <div layout:fragment="content">
 
-
     <table class="table">
         <thead>
-            <tr class="panel panel-default">
-                <th>제목</th>
-                <th>작성자</th>
-                <th>작성일</th>
-                <th>수정일</th>
-            </tr>
             <tr>
-                <th scope="col">[[${dto.title}]]</th>
-                <td th:text="${dto.userId.name}"></td>
-                <td th:text="${#temporals.format(dto.regDate, 'yyyy-MM-dd')}"></td>
-                <td th:text="${#temporals.format(dto.updateTime, 'yyyy-MM-dd')}"></td>
+                <th scope="col">
+                    <h3>[[${dto.title}]]</h3>
+                </th>
             </tr>
         </thead>
 
         <tbody>
-        <tr class="panel panel-default">
-            <th>내용</th>
-            <th></th>
-            <th></th>
-            <tr class="panel-body">
+            <tr>
                 <th scope="col">
-                    <div class="col-lg-4" th:if="${not #lists.isEmpty(imgdto)}">
-                        <div class="panel panel-default" th:each="img, status:${imgdto}">
-                            <div class="panel-heading">
-                            </div>
-                            <div class="panel-body">
-
-                                <img th:src="@{|/images/board/@{${#temporals.format(img.regDate, 'yyMMdd')}}/@{${img.imgName}}|}">
-
-                            </div>
-                        </div>
-                    </div> <!--이미지-->
                     [[${dto.content}]]
-                   </th>
-                <th>
-
                 </th>
-                <th></th>
             </tr>
         </tbody>
+
     </table>
 
-    <a th:href="@{/board/list}" class="btn btn-primary">목록</a>
-    <span th:if="${#authentication.principal.username ==dto.userId}">
-     <a th:href="@{/board/delete(bno=${dto.bno})}" class="btn btn-danger" sec:authorize="isAuthenticated()">삭제</a>
-     <a th:href="@{|/board/modify/${dto.bno}|}" class="btn btn-primary" sec:authorize="isAuthenticated()">수정</a>
-    </span>
-    <br><br><br><br>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-                <button type="button" class="btn btn-primary replyRegister" data-bs-toggle="modal" data-bs-target="#new-modal" sec:authorize="isAuthenticated()">
-                    New Reply
-                </button>
-
-        </div>
-        ===========================================================================================================================
-        <!-- /.panel-heading -->
-        <div class="panel-body">
-            <ul class="chat replylist">
-                <li class="clearfix">
-
-                    <div class="chat-body clearfix">
-                        <div class="header">
-
-                        </div>
-                    </div>
-                </li>
-
-            </ul>
-
-            <div class="col-sm-6">
-                <div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate">
-                    <ul class="pagination">
-
-                    </ul>
-                </div>
-            </div>
-
-
-
-        </div>
-    </div>
-
-    <div class="modal fade" id="new-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
-
-                </div>
-                <div class="modal-body">
-                    <label class="replyText1">내용</label>
-                    <input class="form-control replyText replyText1">
-
-                    <label class="user1">작성자</label>
-                    <input class="form-control user user1" readonly>
-
-                    <label class="regTime1">등록일자</label>
-                    <input class="form-control regTime regTime1" readonly>
-
-                </div>
-
-                <div class="modal-footer">
-
-
-                    <button type="button" class="btn btn-danger saveBtn" sec:authorize="isAuthenticated()">Save</button>
-                    <button type="button" class="btn btn-default modBtn" sec:authorize="isAuthenticated()">modify</button>
-                    <button type="button" class="btn btn-default removeBtn" sec:authorize="isAuthenticated()">삭제</button>
-                    <button type="button" class="btn btn-default" id="closeBtn" data-bs-dismiss="modal" >Close</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-
-    <script src="/js/reply.js"></script>
-
 </div>
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
-
-
-        const result = [[${result}]]
-
-
-
-        if (result){
-            alert(result)
-        }
-        let str = ""; //ul 태그 안에 들어갈 html
-        let str2 = ""; //댓글 페이징 처리를 위한 str2
-        let saveBtn = $(".saveBtn"); // 저장버튼
-        let modBtn = $(".modBtn"); //수정버튼
-        let removeBtn = $(".removeBtn"); //삭제버튼
-        let replyText = $(".replyText"); //작성내용 input
-        let replyer = $(".replyer"); //작성자 input
-        let regTime = $(".regTime"); //input 등록일자
-        let replyRegister = $(".replyRegister"); //댓글 등록 버튼 모달 open
-        let replylist = $(".replylist") //댓글이 달리는 ul태그
-        let pagination = $(".pagination") //댓글의 페이징처리 ul태그
-        let modal = $("#new-modal"); //모달전체
-        let replyText1 = $(".replyText1"); //label + input
-        let regTime1 = $(".regTime1")
-        let replyer1 = $(".replyer1")
-
-        let thispage = 1;
-
-        let date = [[${dto.regDate}]];
-        let bno = [[${dto.bno}]]; //현재 몇 번 글의 댓글인지 알기 위해서
-        let user2 = [[${dto.userId.name}]];
-        console.log(user2);
-        console.log(date)
-        console.log(bno);
-
-        replyRegister.on("click" , function () {
-            modal.find("button[id != closeBtn]").hide();
-            modal.find("input")
-            modal.find("label")
-
-            replyText.val("");
-            replyer.val("");
-            regTime.val("");
-            saveBtn.show();
-
-            replyText1.show()
-        })
-
-
-
-        //저장버튼 클릭시
-        saveBtn.on("click", function (){
-
-            let reply = {"bno" : bno, "replyText" : replyText.val(), "replyer" : replyer.val() }
-
-            let url =  "/reply/new"
-
-            replyservice.register(reply,url, function (data) {
-                console.log(data + "데이터")
-                alert(data.rno +"번 댓글이 등록되었습니다.")
-                showList(1);
-            })
-            modal.modal("hide")
-
-            showList(thispage)
-        })
-
-        //댓글 리스트 클릭시 수정 모달창 오픈
-        //수정
-        replylist.on("click", "li", function (e) {
-
-            modal.modal("show");
-
-            modal.find("button[id != closeBtn]").hide() //버튼중에 아이디를 찾는다. id가 closeBtn이 아닌 거
-            modal.find("input"); //input 태그 전부 숨긴다.
-            modal.find("label");
-
-            //input 태그 벨류값 전부 "" 빈문자열로 초기화
-
-            replyText.val("");
-            replyer.val("");
-            regTime.val("");
-
-            //내용, 작성자, 일자
-            replyText1.show()
-            replyer1.show()
-            regTime1.show()
-
-            modBtn.show()
-            removeBtn.show()
-
-            replyer.attr("readonly", true)
-            regTime.attr("readonly", true)
-
-            let rno = $(this).data("num");
-
-
-            replyservice.read(rno, function (data) {
-                replyText.val(data.replyText)
-                replyer.val(data.replyer)
-                regTime.val(data.regTime)
-                modal.data("rno", data.rno);
-
-
-            });
-
-        })
-
-        //수정버튼 클릭시
-        modBtn.on("click", function (){
-
-            let reply = {"rno" : modal.data("rno"), "replyText" : replyText.val()}
-
-            replyservice.modify(reply, function (data) {
-                alert(data.rno + "번 댓글이 수정되었습니다.")
-                showList(thispage);
-            })
-            modal.modal("hide")
-        })
-
-        //삭제버튼 클릭시
-        removeBtn.on("click", function (){
-            replyservice.delete(modal.data("rno"), function (data){
-
-                alert(data.rno +"번 댓글이 삭제되었습니다.")
-                showList(1);
-            })
-            modal.modal("hide")
-
-
-        })
-
-
-
-
-        let showList = function (page) {
-            str = "";
-            str2 = "";
-
-            let url = "/reply/list/"
-
-            replyservice.list(page, url, bno, function (data) {
-                console.log(data);
-                thispage = data.page
-                if ( data.dtoList == null || data.dtoList.length == 0 ) {
-                    pagination.html(str2);
-                    replylist.html(str);
-                    return null;
-                } else {
-
-                    for (let i = 0; i < data.dtoList.length; i++) {
-                        str += `<li  data-num="${data.dtoList[i].rno}" class="clearfix"><div class="chat-body clearfix"><div class="header">
-                    <strong class="primary-font">${data.dtoList[i].replyer}</strong><small class="pull-right text-muted">
-                    <i class="fa fa-clock-o fa-fw"></i>[[${dto.regDate}]]</small>
-                    </div><p>${data.dtoList[i].replyText}</p></div></li>`;
-                    }
-                    if (data.prev) {
-                        str2 += `<li class="page-item previous " aria-controls="dataTables-example" tabindex="0" id="dataTables-example_previous">
-                <a class="page-link" data-num="${data.start - 1}">이전</a>
-            </li>`;
-                    }
-                    for (let i = data.start, j = data.end; i <= j; i++) {
-                        str2 += `<li class="page-item ${i == data.page ? 'active' : ''}" aria-controls="dataTables-example" tabIndex="0">
-                    <a class="page-link" data-num="${i}">${i}</a>
-                </li>`;
-
-                    }
-                    if (data.next) {
-                        str2 += `<li class="page-item" aria-controls="dataTables-example" tabindex="0" id="dataTables-example_next">
-                <a class="page-link" data-num="${data.end + 1}">Next</a>
-            </li>`
-                    }
-
-                    pagination.html(str2);
-                    replylist.html(str);
-
-                }
-            })
-
-
-        }
-        pagination.on("click", "a", function (e){
-
-            let datanum = $(e.target).data("num")
-
-            showList(datanum)
-
-        })
-        showList(1)
-    </script>
-</th:block>
 
 
 </body>

@@ -1,6 +1,9 @@
 package com.academy.controller;
 
-import com.academy.dto.*;
+import com.academy.dto.BoardDTO;
+import com.academy.dto.NoticeDTO;
+import com.academy.dto.PageRequestDTO;
+import com.academy.dto.PageResponseDTO;
 import com.academy.service.BoardService;
 import com.academy.service.NoticeService;
 import com.academy.service.UserService;
@@ -19,26 +22,19 @@ public class MainController {
 
     private final BoardService boardService;
     private final NoticeService noticeService;
+
     private final UserService userService;
 
 
 
     @GetMapping("/")
-    public String list(PageRequestDTO pageRequestDTO ,Model model) {
-
-
-        PageResponseDTO<BoardListReplyCountDTO> responseDTO = boardService.listWithReplyCount(pageRequestDTO);
+    public String list(PageRequestDTO pageRequestDTO, Model model) {
+        PageResponseDTO<BoardDTO> responseDTO = boardService.list(pageRequestDTO);
         log.info(responseDTO);
         model.addAttribute("pageResponseDTO", responseDTO);
 
         PageResponseDTO<NoticeDTO> responseDTO1 = noticeService.list(pageRequestDTO);
         model.addAttribute("pageResponseDTO1", responseDTO1);
-
         return "main";
-    }
-    @GetMapping("/registerjoin")
-    public String registerjoin(){
-
-        return "registerjoin";
     }
 }

@@ -4,7 +4,6 @@ package com.academy.config;
 import jakarta.servlet.annotation.WebListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -28,21 +27,14 @@ public class SecurityConfig  {
         http
                 .authorizeHttpRequests(
                         (authorizeHttpRequests) -> authorizeHttpRequests
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/notice/modify").hasRole("ADMIN")
-
-//                                .requestMatchers(HttpMethod.POST, "/user/myinfo").permitAll()
-
-//                                .requestMatchers("/user/list").authenticated()
-
-//                                .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("AMDIM")
+                                .requestMatchers("/admin/**").permitAll()
+//                                .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIM")/
                                 .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
                                 .requestMatchers("/**").permitAll()
 
 
                 )
-               .exceptionHandling( a -> a.accessDeniedHandler(new CustomAccessDeniedHandler()))
-
+              //  .exceptionHandling( a -> a.accessDeniedHandler(new CustomAccessDeniedHandler()))
 
 
                 //csrf 토큰은 서버에서 생성되는 임의 값으로 페이지 요청시 항상 다른값으로 생성된다.
@@ -64,13 +56,13 @@ public class SecurityConfig  {
                         .usernameParameter("email")
                         .failureUrl("/user/login/error")
 
+
                 )
 
                 .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true))
-
 
                 // 로그인이 되지 않은 사용자 가 로그인을 요하는 페이지 접속시 (rest) 핸들링
                 .exceptionHandling(
@@ -98,6 +90,51 @@ public class SecurityConfig  {
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
+//
+//
+//    @Bean
+//    public ServletContextListener contextListener() {
+//        return new ServletContextListener() {
+//            @Override
+//            public void contextDestroyed(ServletContextEvent sce) {
+//                // 애플리케이션 종료 시 처리
+//                System.out.println("애플리케이션 종료됨!");
+//                // 모든 활성 세션 무효화
+//                ServletRequestAttributes sessionAttr = ((ServletRequestAttributes) RequestContextHolder .getRequestAttributes());
+//                System.out.println("객체 얻음");
+//
+//                HttpServletRequest request = sessionAttr.getRequest();
+//                System.out.println("request" + request);
+//                System.out.println("request" + request);
+//                System.out.println("request" + request);
+//                System.out.println("request" + request);
+//
+//                HttpSession httpSession = request.getSession();
+//
+//                System.out.println("httpSession" + httpSession);
+//                System.out.println("httpSession" + httpSession);
+//                System.out.println("httpSession" + httpSession);
+//                System.out.println("httpSession" + httpSession);
+//                if (httpSession != null) {
+//                    System.out.println("세션 초기화 !!");
+//                    System.out.println("세션 초기화 !!");
+//                    System.out.println("세션 초기화 !!");
+//                    System.out.println("세션 초기화 !!");
+//                    System.out.println("세션 초기화 !!");
+//                    httpSession.invalidate();
+//                }
+//
+//
+//            }
+//        };
+//    }
+
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring().requestMatchers("/css/**", "/js/**", "/img/**");
+//    }
+
 
 
 }

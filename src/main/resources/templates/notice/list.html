@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/layout1}">
 <head>
     <meta charset="UTF-8">
@@ -13,7 +13,9 @@
     <div class="container">
         <h2>공지사항 목록</h2>
         <div>
-            <a href="/notice/upload" class="btn btn-primary" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">공지사항 작성</a>
+            <th:block>
+            <a href="/notice/upload" class="btn btn-primary" sec:authorize="hasAnyAuthority('ROLE_ADMIN')"> 공지사항 작성</a>
+            </th:block>
         </div>
         <table class="table table-striped">
             <thead>
@@ -31,7 +33,7 @@
                 <td>
                     <a th:href="@{/notice/view/{nno}(nno=${notice.nno})}" th:text="${notice.title}"></a>
                 </td>
-                <td th:text="${notice.user.name}"></td>
+                <td th:text="${notice.user}"></td>
                 <td th:text="${#temporals.format(notice.regDate, 'yyyy-MM-dd')}"></td>
                 <td th:text="${#temporals.format(notice.updateTime, 'yyyy-MM-dd')}"></td>
 
