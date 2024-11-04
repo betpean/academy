@@ -27,11 +27,8 @@ public class SecurityConfig  {
         http
                 .authorizeHttpRequests(
                         (authorizeHttpRequests) -> authorizeHttpRequests
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/cart/**").authenticated()      //주문페이지는 로그인을 해야 볼수 있음
-                                .requestMatchers("/order/**").authenticated()      //주문페이지는 로그인을 해야 볼수 있음
-                                .requestMatchers("/orders/**").authenticated()      //주문페이지는 로그인을 해야 볼수 있음
-//                                .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("AMDIM")
+                                .requestMatchers("/admin/**").permitAll()
+//                                .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIM")/
                                 .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
                                 .requestMatchers("/**").permitAll()
 

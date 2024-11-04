@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @Log4j2
 @RequiredArgsConstructor
-@RequestMapping("/admin1")
+@RequestMapping("/admin")
 public class AdminController {
 
     private final PasswordEncoder passwordEncoder;
@@ -26,7 +26,7 @@ public class AdminController {
     @GetMapping("/new")
     public String adminregister(Model model) {
         model.addAttribute("userFormDTO", new UserFormDTO());
-        return "admin1/register";
+        return "admin/register";
 
     }
 
@@ -34,7 +34,7 @@ public class AdminController {
     public String register(@Valid UserFormDTO userFormDTO,
                            BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return "admin1/register";
+            return "admin/register";
         }
         log.info("나이2");
 
@@ -47,7 +47,7 @@ public class AdminController {
         } catch (IllegalStateException e) {
             log.info("나이");
             model.addAttribute("errorMessage", e.getMessage());
-            return "admin1/register";
+            return "admin/register";
         }
         return "redirect:/user/login";
     }
